@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/htmx.org@2.0.2" integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ" crossorigin="anonymous"></script>
+    <title>Go & HTMX</title>
+</head>
+<body>
+        <h1>Go & HTMX</h1>
+        <ul id="todo-list">
+            {{range .Todos}}
+                <li id="todo-{{.Id}}">
+                    {{.Message}}
+                    <button hx-post="/delete-todo" hx-target="#todo-{{.Id}}" hx-swap="outerHTML" hx-include="[name=id]" class="delete-button">Delete</button>
+                    <input type="hidden" name="id" value="{{.Id}}">
+                </li>
+            {{end}}
+        </ul>
+    
+        <form hx-swap="beforeend" hx-target="#todo-list" hx-post="/add-todo">
+            <label for="message">Message:</label>
+            <input type="text" id="message" name="message" required>
+            <button type="submit">Create</button>
+        </form>
+    
+        <!-- Define the todo-list-element template block -->
+        {{define "todo-list-element"}}
+            <li id="todo-{{.Id}}">
+                {{.Message}}
+                <button hx-post="/delete-todo" hx-target="#todo-{{.Id}}" hx-swap="outerHTML" hx-include="[name=id]" class="delete-button">Delete</button>
+                <input type="hidden" name="id" value="{{.Id}}">
+            </li>
+        {{end}}
+</body>
+</html>
